@@ -1,0 +1,12 @@
+*.gpx
+*.geojson
+*.cache
+.phpunit.cache
+vendor
+build
+.vscode/launch.json
+.vscode/settings.json
+.travis.yml
+.phpcs.xml.dist
+phpunit.xml.dist
+KML-for-PHP.code-workspace
