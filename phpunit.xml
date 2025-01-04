@@ -4,8 +4,7 @@
 	backupGlobals="false" 
 	colors="true" 
 	beStrictAboutTestsThatDoNotTestAnything="false" 
-	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" 
-	cacheDirectory=".phpunit.cache">
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd">
   <testsuites>
     <testsuite name="default">
       <directory suffix="Tests.php">tests</directory>
