@@ -7,28 +7,13 @@ It is based on [Stepan Daleky's KML parser on GitLab](https://gitlab.com/stepand
 
 Currently, the KML documents are parsed as follows:
 
-- Either root KML folder or root KML document is considered, not both (first it checks for a root folder and, if not found for a root document);
-- A KML container is searched, in this order, for: folders, documents and placemarks;
 - For a placemark, `Point`, `Linestring`, `LinearRing`, `Polygon` and `MultiGeometry` geometries are supported;
-- Neither folder, nor document metadata is stored;
-
-- A `Point` geometry is read as a document-level waypoint, regardless of where it is found in the KML file;
-- For a `Point` geometry, the name and description metadata are stored;
-
-- A `LineString` is read as a track part with a single track segment;
-- For a `LineString` geometry, only the name metadata is stored;
-
-- A `LinearRing` is read as a track part with a single track segment;
-- For a `LinearRing` geometry, only the name metadata is stored;
-
-- A `Polygon` is read as two track parts: one for the outer boundary `LinearRing`, the other for the inner boundary `LinearRing`;
-- For a `Polygon` geometry, only the name metadata is stored, for each of the resulting track parts;
-
-- A `MultiGeometry` is processed by reading its individual parts, not as a whole, obeying the above-mentioned rules.
 
 ## Usage
 
 ### Using the parser directly
+
+The parser class simply parses a KML string (or a file that contains a KML string) and returns an object graph:
 
 ```PHP
 use KamelPhp\KmlParser\Parser;
@@ -42,8 +27,36 @@ $kml = $kmlParser->getKml();
 ```
 
 Some samples:
-- The built-in [`Processor`]()
-- The [current set of tests for the parser class]()
+- The built-in [`Processor`](https://github.com/alexboia/KML-for-PHP/blob/main/src/KmlParser/Processor.php)
+- The [current set of tests for the parser class](https://github.com/alexboia/KML-for-PHP/blob/main/tests/LibKmlParserTests.php)
 
 ### Using the processor
 
+The [processor class](https://github.com/alexboia/KML-for-PHP/blob/main/src/KmlParser/Processor.php) provides a simple and expedient way of traversing a KML document, while allowing a certain degree of customization. Its usage is not mandatory.
+
+Limitations:
+
+- Either root KML folder or root KML document is considered, not both (first it checks for a root folder and, if not found for a root document);
+- A KML container is searched, in this order, for: folders, documents and placemarks;
+- Neither folder, nor document metadata is stored;
+- For a placemark, only the name and description metadata items are stored and reported;
+- Order in which various document parts are processed cannot be altered.
+
+In order to use the processor, you need to provide a mandatory delegate (a class implementing [`KamelPhp\KmlParser\Processor\Delegate`](https://github.com/alexboia/KML-for-PHP/blob/main/src/KmlParser/Processor/Delegate.php)) which you can use to:
+
+- control what gets reported back to you (`Delegate::shouldXYZ()` methods, e.g. return `false` from `Delegate::shouldProcessPointGeometry()` if you do not what to have KML points sent back to you.);
+- process KML primitives as they are found and reported back to you (e.g. implement `Delegate::processPoint()` to process KML points);
+- react when processing begins (`Delegate::begin()`) and ends (`Delegate::end()`);
+- react when an error occurs (`Delegate::error()`).
+
+As it may already be obvious, the way it works sort of breaks the tree structure, but that's perfectly acceptable in my use case - obtain relevant geometries for simple map drawing.
+
+It's up to yo what the delegate does, either it stores the artefacts somewhere or it builds some representation in memory and provides a way to access it at the end. See [here an example implementation](https://github.com/alexboia/WP-Trip-Summary/blob/master/lib/route/track/documentParser/kml/LibKmlProcessorDelegate.php).
+
+```PHP
+use KamelPhp\KmlParser\Parser;
+
+$delegate = new MyDelegate();
+$processor = new Processor($delegate);
+$processor->processKmlString($sourceString);
+```
