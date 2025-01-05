@@ -36,6 +36,9 @@ abstract class Container extends Feature {
 		return new Document($this->element->getChild(EntityTagNames::Document));
 	}
 
+	/**
+	 * @return Document[]
+	 */
 	public function getDocuments(): array {
 		if (!$this->hasDocuments()) {
 			return array();

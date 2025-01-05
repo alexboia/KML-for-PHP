@@ -5,9 +5,13 @@ It is based on [Stepan Daleky's KML parser on GitLab](https://gitlab.com/stepand
 
 ## About
 
-Currently, the KML documents are parsed as follows:
+Supported KML entities:
 
-- For a placemark, `Point`, `Linestring`, `LinearRing`, `Polygon` and `MultiGeometry` geometries are supported;
+- `Kml` class (`<kml>` root element);
+- `Folder` and `Document` classes (and elements) as `Container` types and direct children of the KML root;
+- Abstract `Feature` class and element, with support for the following attributes: `id`, `styleUrl`, `name`, `description`, `open`, `visibility`, `address`, `phoneNumber`;
+- `Placemark` class and element, with support for `Point`, `Linestring`, `LinearRing`, `Polygon` and `MultiGeometry` geometries as well as `Style` and `ExtendedData`.
+
 
 ## Usage
 
