@@ -12,7 +12,13 @@ Supported KML entities:
 - Abstract `Feature` class and element, with support for the following attributes: `id`, `styleUrl`, `name`, `description`, `open`, `visibility`, `address`, `phoneNumber`;
 - `Placemark` class and element, with support for `Point`, `Linestring`, `LinearRing`, `Polygon` and `MultiGeometry` geometries as well as `Style` and `ExtendedData`.
 
-## Usage
+## Installation
+
+Install the latest version with:
+
+```
+composer require myclar/kamel-php
+```
 
 ### Using the parser directly
 
