@@ -12,7 +12,6 @@ Supported KML entities:
 - Abstract `Feature` class and element, with support for the following attributes: `id`, `styleUrl`, `name`, `description`, `open`, `visibility`, `address`, `phoneNumber`;
 - `Placemark` class and element, with support for `Point`, `Linestring`, `LinearRing`, `Polygon` and `MultiGeometry` geometries as well as `Style` and `ExtendedData`.
 
-
 ## Usage
 
 ### Using the parser directly
@@ -44,7 +43,8 @@ Limitations:
 - A KML container is searched, in this order, for: folders, documents and placemarks;
 - Neither folder, nor document metadata is stored;
 - For a placemark, only the name and description metadata items are stored and reported;
-- Order in which various document parts are processed cannot be altered.
+- Order in which various document parts are processed cannot be altered;
+- Visibility, as specified by the `visibility` feature attribute, is not accounted for.
 
 In order to use the processor, you need to provide a mandatory delegate (a class implementing [`KamelPhp\KmlParser\Processor\Delegate`](https://github.com/alexboia/KML-for-PHP/blob/main/src/KmlParser/Processor/Delegate.php)) which you can use to:
 
