@@ -1,7 +1,6 @@
 {
 	"name": "myclar/kamel-php",
 	"description": "A PHP KML parser library",
-	"version": "1.0.0",
 	"type": "library",
 	"keywords": ["php", "kml", "library", "parser"],
 	"readme": "README.md",
@@ -18,7 +17,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"KamelPhp\\Tests": "tests/"
+			"KamelPhp\\Tests\\": "tests/"
 		}
 	}
 }
