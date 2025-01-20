@@ -19,6 +19,36 @@ namespace KamelPhp\Tests {
 		use TestDataFileHelper;
 		use DateTimeHelpers;
 
+		public function test_canParse_emptyPlacemark(): void {
+			$this->_runPlacemarkTest('kml/test-kml-placemark-empty.kml', 
+				function(Placemark $placemark) {
+					$this->assertEquals('Empty placemark', $placemark->getName());
+					$this->assertEquals('plk-empty-1', $placemark->getId());
+	
+					$this->assertFalse($placemark->hasTimeSpan());
+					$this->assertFalse($placemark->hasTimeStamp());
+
+					$this->assertNull($placemark->getTimeSpan());
+					$this->assertNull($placemark->getTimeStamp());
+
+					$this->assertFalse($placemark->hasPoint());
+					$this->assertNull($placemark->getPoint());
+
+					$this->assertFalse($placemark->hasLineString());
+					$this->assertNull($placemark->getLineString());
+
+					$this->assertFalse($placemark->hasLinearRing());
+					$this->assertNull($placemark->getLinearRing());
+
+					$this->assertFalse($placemark->hasPolygon());
+					$this->assertNull($placemark->getPolygon());
+
+					$this->assertFalse($placemark->hasMultiGeometry());
+					$this->assertNull($placemark->getMultiGeometry());
+				}
+			);
+		}
+
 		public function test_canParse_withPoint(): void {
 			$this->_runPlacemarkTest('kml/test-kml-placemark-with-point.kml', 
 				function(Placemark $placemark) {
