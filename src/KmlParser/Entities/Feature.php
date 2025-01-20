@@ -3,11 +3,48 @@ declare(strict_types = 1);
 
 namespace KamelPhp\KmlParser\Entities {
 
+    use KamelPhp\KmlParser\EntityTagNames;
     use KamelPhp\XmlElement\Element;
 
 	abstract class Feature extends Entity {
 		public function __construct(Element $element) {
 			parent::__construct($element);
+		}
+
+		public function getTimeStamp(): TimeStamp|null {
+			if (!$this->hasTimeStamp()) {
+				return null;
+			}
+
+			return new TimeStamp($this->element->getChild(EntityTagNames::TimeStamp));
+		}
+
+		public function hasTimeStamp(): bool {
+			return $this->element->hasChild(EntityTagNames::TimeStamp);
+		}
+
+		public function getTimeSpan(): TimeSpan|null {
+			if (!$this->hasTimeSpan()) {
+				return null;
+			}
+
+			return new TimeSpan($this->element->getChild(EntityTagNames::TimeSpan));
+		}
+
+		public function hasTimeSpan(): bool {
+			return $this->element->hasChild(EntityTagNames::TimeSpan);
+		}
+
+		public function getExtendedData(): ExtendedData|null {
+			if (!$this->hasExtendedData()) {
+				return null;
+			}
+	
+			return new ExtendedData($this->element->getChild(EntityTagNames::ExtendedData));
+		}
+	
+		public function hasExtendedData(): bool {
+			return $this->element->hasChild(EntityTagNames::ExtendedData);
 		}
 
 		public function getId(): string {

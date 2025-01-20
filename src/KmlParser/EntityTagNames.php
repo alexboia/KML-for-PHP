@@ -26,5 +26,9 @@ namespace KamelPhp\KmlParser {
 		const MultiGeometry = 'MultiGeometry';
 
 		const ExtendedData = 'ExtendedData';
+
+		const TimeSpan = 'TimeSpan';
+
+		const TimeStamp = 'TimeStamp';
 	}
 }

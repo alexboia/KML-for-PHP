@@ -31,18 +31,6 @@ class Placemark extends Feature {
 		return $this->element->hasChild(EntityTagNames::Point);
 	}
 
-	public function getExtendedData(): ExtendedData|null {
-		if (!$this->hasExtendedData()) {
-			return null;
-		}
-
-		return new ExtendedData($this->element->getChild(EntityTagNames::ExtendedData));
-	}
-
-	public function hasExtendedData(): bool {
-		return $this->element->hasChild(EntityTagNames::ExtendedData);
-	}
-
 	public function getLineString(): LineString|null {
 		if (!$this->hasLineString()) {
 			return null;

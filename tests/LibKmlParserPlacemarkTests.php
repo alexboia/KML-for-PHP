@@ -1,24 +1,35 @@
 <?php
 namespace KamelPhp\Tests {
 
+    use DateTime;
     use KamelPhp\KmlParser\Entities\LinearRing;
     use KamelPhp\KmlParser\Entities\LineString;
     use KamelPhp\KmlParser\Entities\MultiGeometry;
     use KamelPhp\KmlParser\Entities\Placemark;
     use KamelPhp\KmlParser\Entities\Point;
     use KamelPhp\KmlParser\Entities\Polygon;
+    use KamelPhp\KmlParser\Entities\TimeSpan;
+    use KamelPhp\KmlParser\Entities\TimeStamp;
     use KamelPhp\KmlParser\Parser;
+    use KamelPhp\Tests\Helper\DateTimeHelpers;
     use KamelPhp\Tests\Helper\TestDataFileHelper;
     use PHPUnit\Framework\TestCase;
 
 	class LibKmlParserPlacemarkTests extends TestCase {
 		use TestDataFileHelper;
+		use DateTimeHelpers;
 
 		public function test_canParse_withPoint(): void {
 			$this->_runPlacemarkTest('kml/test-kml-placemark-with-point.kml', 
 				function(Placemark $placemark) {
 					$this->assertEquals('Placemark with Point', $placemark->getName());
 	
+					$this->assertFalse($placemark->hasTimeSpan());
+					$this->assertFalse($placemark->hasTimeStamp());
+
+					$this->assertNull($placemark->getTimeSpan());
+					$this->assertNull($placemark->getTimeStamp());
+
 					$this->assertTrue($placemark->hasPoint());
 					$this->assertFalse($placemark->hasLineString());
 					$this->assertFalse($placemark->hasLinearRing());
@@ -42,6 +53,60 @@ namespace KamelPhp\Tests {
 			$this->assertEquals(-90.86948943473118, $latLng->getLongitude());
 			$this->assertEquals(48.25450093195546, $latLng->getLatitude());
 			$this->assertEquals(123.456, $latLng->getAltitude());
+		}
+
+		public function test_canParse_withPoint_andTimePrimitives() {
+			$this->_runPlacemarkTest('kml/test-kml-placemark-with-point-timePrimitives.kml', 
+				function(Placemark $placemark) {
+					$this->assertEquals('Placemark with Point and Time Primitives', $placemark->getName());
+
+					$this->assertTrue($placemark->hasTimeSpan());
+					$this->assertTrue($placemark->hasTimeStamp());
+
+					$timeSpan = $placemark->getTimeSpan();
+					$this->_assertExpectedTimeSpan($timeSpan);
+
+					$timeStamp = $placemark->getTimeStamp();
+					$this->_assertExpectedTimeStamp($timeStamp);
+	
+					$this->assertTrue($placemark->hasPoint());
+					$point = $placemark->getPoint();
+
+					$this->assertNotNull($point);
+					$this->_assertExpectedPoint($point);
+				}
+			);
+		}
+
+		private function _assertExpectedTimeSpan(TimeSpan $timeSpan) {
+			$this->assertEquals('p-timespan-1', $timeSpan->getId());
+
+			$this->assertTrue($timeSpan->hasBegin());
+			$this->assertTrue($timeSpan->hasEnd());
+
+			$this->assertEquals('2025-01-11T15:07:40.123+02:00', $timeSpan->getBegin());
+			$begin = $timeSpan->getBeginAsDateTime();
+			$this->assertNotNull($begin);
+
+			$this->_assertDateTime($begin, 2025, 1, 11, 15, 7, 40, 123, '+02:00');
+
+			$this->assertEquals('2025-01-30T16:17:18.456+02:00', $timeSpan->getEnd());
+
+			$end = $timeSpan->getEndAsDateTime();
+			$this->assertNotNull($end);
+			$this->_assertDateTime($end, 2025, 1, 30, 16, 17, 18, 456, '+02:00');
+		}
+
+		private function _assertExpectedTimeStamp(TimeStamp $timeStamp) {
+			$this->assertEquals('p-timestamp-1', $timeStamp->getId());
+
+			$this->assertTrue($timeStamp->hasWhen());
+
+			$this->assertEquals('2025-01-20T15:07:40.789+02:00', $timeStamp->getWhen());
+			
+			$when = $timeStamp->getWhenAsDateTime();			
+			$this->assertNotNull($when);
+			$this->_assertDateTime($when, 2025, 1, 20, 15, 07, 40, 789, '+02:00');
 		}
 
 		public function test_canParse_withLineString(): void {
