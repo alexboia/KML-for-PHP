@@ -5,7 +5,7 @@ namespace KamelPhp\KmlParser\Entities {
 	class Snippet extends Entity {
 
 		public function getMaxLines(int $default = 0): int {
-			if ($this->hasMaxLines()) {
+			if (!$this->hasMaxLines()) {
 				return $default;
 			}
 
@@ -17,7 +17,7 @@ namespace KamelPhp\KmlParser\Entities {
 		}
 
 		public function getText(): string|null {
-			return strip_tags($this->element->getValue());
+			return trim(strip_tags($this->element->getValue()));
 		}
 	}
 }

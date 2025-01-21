@@ -25,28 +25,69 @@ namespace KamelPhp\Tests {
 					$this->assertEquals('Empty placemark', $placemark->getName());
 					$this->assertEquals('plk-empty-1', $placemark->getId());
 	
-					$this->assertFalse($placemark->hasTimeSpan());
-					$this->assertFalse($placemark->hasTimeStamp());
-
-					$this->assertNull($placemark->getTimeSpan());
-					$this->assertNull($placemark->getTimeStamp());
-
-					$this->assertFalse($placemark->hasPoint());
-					$this->assertNull($placemark->getPoint());
-
-					$this->assertFalse($placemark->hasLineString());
-					$this->assertNull($placemark->getLineString());
-
-					$this->assertFalse($placemark->hasLinearRing());
-					$this->assertNull($placemark->getLinearRing());
-
-					$this->assertFalse($placemark->hasPolygon());
-					$this->assertNull($placemark->getPolygon());
-
-					$this->assertFalse($placemark->hasMultiGeometry());
-					$this->assertNull($placemark->getMultiGeometry());
+					$this->_assertNoSnippet($placemark);
+					$this->_assertNoTimePrimitives($placemark);
+					$this->_assertNoGeometries($placemark);
 				}
 			);
+		}
+
+		private function _assertNoTimePrimitives(Placemark $placemark) {
+			$this->assertFalse($placemark->hasTimeSpan());
+			$this->assertFalse($placemark->hasTimeStamp());
+
+			$this->assertNull($placemark->getTimeSpan());
+			$this->assertNull($placemark->getTimeStamp());
+		}
+
+		private function _assertNoGeometries(Placemark $placemark) {
+			$this->assertFalse($placemark->hasPoint());
+			$this->assertNull($placemark->getPoint());
+
+			$this->assertFalse($placemark->hasLineString());
+			$this->assertNull($placemark->getLineString());
+
+			$this->assertFalse($placemark->hasLinearRing());
+			$this->assertNull($placemark->getLinearRing());
+
+			$this->assertFalse($placemark->hasPolygon());
+			$this->assertNull($placemark->getPolygon());
+
+			$this->assertFalse($placemark->hasMultiGeometry());
+			$this->assertNull($placemark->getMultiGeometry());
+		}
+
+		private function _assertNoSnippet(Placemark $placemark) {
+			$this->assertFalse($placemark->hasSnippet());
+			$this->assertNull($placemark->getSnippet());
+			$this->assertNull($placemark->getSnippetText());
+		}
+
+		public function test_canParse_emptyPlacemarkWithSnippet(): void {
+			$this->_runPlacemarkTest('kml/test-kml-placemark-empty-with-snippet.kml', 
+				function(Placemark $placemark) {
+					$this->assertEquals('Empty placemark with snippet', $placemark->getName());
+					$this->assertEquals('plk-empty-wsnippet-1', $placemark->getId());
+	
+					$this->_assertKnownSnippet($placemark, 
+						'A short description of the feature. In Google Earth, this description is displayed in the Places panel under the name of the feature.',
+						2);
+
+					$this->_assertNoTimePrimitives($placemark);
+					$this->_assertNoGeometries($placemark);
+				}
+			);
+		}
+
+		private function _assertKnownSnippet(Placemark $placemark, $expectedText, $expectedMaxLines) {
+			$this->assertTrue($placemark->hasSnippet());
+			
+			$snippet = $placemark->getSnippet();
+			$this->assertNotNull($snippet);
+
+			$this->assertEquals($expectedText, $snippet->getText());
+			$this->assertEquals($expectedMaxLines, $snippet->getMaxLines());
+			$this->assertEquals($snippet->getText(), $placemark->getSnippetText());
 		}
 
 		public function test_canParse_withPoint(): void {
