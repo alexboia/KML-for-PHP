@@ -11,6 +11,27 @@ namespace KamelPhp\KmlParser\Entities {
 			parent::__construct($element);
 		}
 
+		public function getSnippet(): Snippet|null {
+			if (!$this->hasSnippet()) {
+				return null;
+			}
+
+			return new Snippet($this->element->getChild(EntityTagNames::Snippet));
+		}
+
+		public function getSnippetText(): string|null {
+			$snippet = $this->getSnippet();
+			if ($snippet != null) {
+				return $snippet->getText();
+			} else {
+				return null;
+			}
+		}
+
+		public function  hasSnippet() : bool {
+			return $this->element->hasChild(EntityTagNames::Snippet);
+		}
+
 		public function getTimeStamp(): TimeStamp|null {
 			if (!$this->hasTimeStamp()) {
 				return null;

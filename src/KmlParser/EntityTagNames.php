@@ -30,5 +30,7 @@ namespace KamelPhp\KmlParser {
 		const TimeSpan = 'TimeSpan';
 
 		const TimeStamp = 'TimeStamp';
+
+		const Snippet = 'Snippet';
 	}
 }
