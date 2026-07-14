@@ -59,10 +59,10 @@ abstract class Container extends Feature {
 	public function getPlacemarks(): array {
 		return array_map(function (Element $element) {
 			return new Placemark($element);
-		}, $this->element->getChildren(EntityTagNames::Placemerk));
+		}, $this->element->getChildren(EntityTagNames::Placemark));
 	}
 
 	public function hasPlacemarks(): bool {
-		return $this->element->hasChild(EntityTagNames::Placemerk);
+		return $this->element->hasChild(EntityTagNames::Placemark);
 	}
 }

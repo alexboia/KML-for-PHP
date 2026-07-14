@@ -8,11 +8,11 @@ namespace KamelPhp\KmlParser\Processor {
     use KamelPhp\KmlParser\Entities\TimeStamp;
 
 	class FeatureMetadata {
-		private $_name;
+		private string|null $_name;
 
-		private $_description;
+		private string|null $_description;
 
-		private $_keywords;
+		private string|null $_keywords;
 
 		/**
 		 * @var TimeSpan|null
@@ -24,7 +24,7 @@ namespace KamelPhp\KmlParser\Processor {
 		 */
 		private $_timeStamp;
 
-		public function __construct($name, $description, $keywords) {
+		public function __construct(string|null $name, string|null $description, string|null $keywords) {
 			$this->_name = trim($name);
 			$this->_description = trim($description);
 			$this->_keywords = trim($keywords);

@@ -7,7 +7,7 @@ namespace KamelPhp\KmlParser {
 
 		const Document = 'Document';
 
-		const Placemerk = 'Placemark';
+		const Placemark = 'Placemark';
 
 		const StyleMap = 'StyleMap';
 
